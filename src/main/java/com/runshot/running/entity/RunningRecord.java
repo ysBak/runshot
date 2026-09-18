@@ -29,6 +29,9 @@ public class RunningRecord {
 
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public static RunningRecord create(
             Double distance,
