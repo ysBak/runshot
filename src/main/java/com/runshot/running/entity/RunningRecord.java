@@ -1,5 +1,6 @@
 package com.runshot.running.entity;
 
+import com.runshot.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
