@@ -35,7 +35,6 @@ public class RunningRecord {
     private User user;
 
     public static RunningRecord create(
-            User user,
             Double distance,
             Integer runningTime,
             LocalDate runningDate,
@@ -43,7 +42,6 @@ public class RunningRecord {
     ) {
         RunningRecord record = new RunningRecord();
 
-        record.user = user;
         record.distance = distance;
         record.runningTime = runningTime;
         record.pace = (int) (runningTime / distance);
