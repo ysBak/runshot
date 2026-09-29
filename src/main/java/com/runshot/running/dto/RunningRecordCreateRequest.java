@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record RunningRecordCreateRequest(
+        @NotNull
+        Long userId,
 
         @NotNull
         @Positive
