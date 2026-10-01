@@ -27,6 +27,13 @@ public class RunningRecordController {
         return runningRecordService.getRun(id);
     }
 
+    @GetMapping("/users/{userId}")
+    public List<RunningRecord> getRunsByUser(
+            @PathVariable Long userId
+    ) {
+        return runningRecordService.getRunsByUser(userId);
+    }
+
 
     @PostMapping
     public RunningRecord createRun(
