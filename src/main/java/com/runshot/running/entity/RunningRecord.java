@@ -35,7 +35,7 @@ public class RunningRecord {
     private User user;
 
     public static RunningRecord create(
-            Double distance,
+            User user, Double distance,
             Integer runningTime,
             LocalDate runningDate,
             String content
