@@ -4,6 +4,8 @@ import com.runshot.running.dto.RunningRecordCreateRequest;
 import com.runshot.running.dto.RunningRecordUpdateRequest;
 import com.runshot.running.entity.RunningRecord;
 import com.runshot.running.repository.RunningRecordRepository;
+import com.runshot.user.entity.User;
+import com.runshot.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.List;
 public class RunningRecordService {
 
     private final RunningRecordRepository runningRecordRepository;
+    private final UserRepository userRepository;
 
     public List<RunningRecord> getRuns() {
         return runningRecordRepository.findAll();
@@ -23,8 +26,14 @@ public class RunningRecordService {
             RunningRecordCreateRequest request
     ) {
 
+        User user = userRepository.findById(request.userId())
+                .orElseThrow(
+                        () -> new IllegalArgumentException("사용자가 없습니다.")
+                );
+
         RunningRecord runningRecord =
                 RunningRecord.create(
+                        user,
                         request.distance(),
                         request.runningTime(),
                         request.runningDate(),
