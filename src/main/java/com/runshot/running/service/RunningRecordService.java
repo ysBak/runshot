@@ -43,6 +43,10 @@ public class RunningRecordService {
         return runningRecordRepository.save(runningRecord);
     }
 
+    public List<RunningRecord> getRunsByUser(Long userId) {
+        return runningRecordRepository.findByUserId(userId);
+    }
+
     public RunningRecord getRun(Long id) {
         return runningRecordRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("러닝 기록이 없습니다."));
