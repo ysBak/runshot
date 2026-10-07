@@ -1,6 +1,7 @@
 package com.runshot.user.service;
 
 import com.runshot.user.dto.UserCreateRequest;
+import com.runshot.user.dto.UserResponse;
 import com.runshot.user.entity.User;
 import com.runshot.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +9,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class
-UserService {
+public class UserService {
 
     private final UserRepository userRepository;
 
-    public User createUser(UserCreateRequest request) {
+    public UserResponse createUser(
+            UserCreateRequest request
+    ) {
 
         if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException(
@@ -27,6 +29,8 @@ UserService {
                 request.nickname()
         );
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        return UserResponse.from(savedUser);
     }
 }
