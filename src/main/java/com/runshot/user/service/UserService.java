@@ -6,12 +6,14 @@ import com.runshot.user.entity.User;
 import com.runshot.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(
             UserCreateRequest request
@@ -23,9 +25,12 @@ public class UserService {
             );
         }
 
+        String encodedPassword =
+                passwordEncoder.encode(request.password());
+
         User user = new User(
                 request.email(),
-                request.password(),
+                encodedPassword,
                 request.nickname()
         );
 

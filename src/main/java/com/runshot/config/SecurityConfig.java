@@ -11,6 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import jakarta.servlet.DispatcherType;
+
 
 @Configuration
 @EnableWebSecurity
@@ -44,11 +48,25 @@ public class SecurityConfig {
 
                 // 6. API별 접근 권한 설정
                 .authorizeHttpRequests(auth -> auth
+                        // 오류 처리 요청은 인증 없이 허용
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+
+                        // 회원가입 허용
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+
+                        // 로그인 허용
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+
+                        // 나머지 요청은 인증 필요
                         .anyRequest().authenticated()
                 );
 
         return http.build();
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }
