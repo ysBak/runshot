@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.jsonwebtoken.Jwts;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -58,4 +60,5 @@ public class AuthService {
                 expiresIn
         );
     }
+
 }

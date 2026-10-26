@@ -15,50 +15,73 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import jakarta.servlet.DispatcherType;
 
+import com.runshot.auth.jwt.JwtAuthenticationFilter;
+import com.runshot.auth.jwt.JwtTokenProvider;
+import com.runshot.user.repository.UserRepository;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)
-            throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            JwtTokenProvider jwtTokenProvider,
+            UserRepository userRepository
+    ) throws Exception {
+
+        JwtAuthenticationFilter jwtFilter =
+                new JwtAuthenticationFilter(
+                        jwtTokenProvider,
+                        userRepository
+                );
 
         http
-                // 1. JWT 기반 REST API를 위한 CSRF 설정
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // 2. 서버 세션을 사용하지 않음
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-
-                // 3. 기본 로그인 화면 비활성화
-                .formLogin(AbstractHttpConfigurer::disable)
-
-                // 4. HTTP Basic 인증 비활성화
-                .httpBasic(AbstractHttpConfigurer::disable)
-
-                // 5. 인증되지 않은 요청에 401 반환
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) ->
-                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
+                        .sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
                         )
                 )
 
-                // 6. API별 접근 권한 설정
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(
+                                (request, response, authException) ->
+                                        response.sendError(
+                                                HttpServletResponse.SC_UNAUTHORIZED
+                                        )
+                        )
+                )
+
                 .authorizeHttpRequests(auth -> auth
-                        // 오류 처리 요청은 인증 없이 허용
-                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                        .dispatcherTypeMatchers(
+                                jakarta.servlet.DispatcherType.ERROR
+                        ).permitAll()
 
-                        // 회원가입 허용
-                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/users"
+                        ).permitAll()
 
-                        // 로그인 허용
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/auth/login"
+                        ).permitAll()
 
-                        // 나머지 요청은 인증 필요
                         .anyRequest().authenticated()
+                )
+
+                // JWT 인증 필터 등록
+                .addFilterBefore(
+                        jwtFilter,
+                        UsernamePasswordAuthenticationFilter.class
                 );
 
         return http.build();
