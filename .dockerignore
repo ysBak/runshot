@@ -1,0 +1,9 @@
+.git
+.gradle
+build
+.env
+.env.*
+!.env.example
+.idea
+node_modules
+src/main/resources/application.properties

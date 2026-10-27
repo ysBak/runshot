@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
 
 @RestController
@@ -17,6 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createUser(
            @Valid @RequestBody UserCreateRequest request
     ) {

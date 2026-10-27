@@ -28,10 +28,11 @@ public class RunningRecord {
 
     private LocalDate runningDate;
 
+    @Column(length = 500)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public static RunningRecord create(
@@ -41,10 +42,10 @@ public class RunningRecord {
             String content
     ) {
         RunningRecord record = new RunningRecord();
-
+        record.user = user;
         record.distance = distance;
         record.runningTime = runningTime;
-        record.pace = (int) (runningTime / distance);
+        record.pace = (int) Math.round(runningTime / distance);
         record.runningDate = runningDate;
         record.content = content;
 

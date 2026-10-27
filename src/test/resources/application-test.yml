@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:runshot-test;MODE=MySQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+app:
+  jwt:
+    # 테스트 전용 키. 운영에는 절대로 사용하지 않는다.
+    secret: dGVzdC1vbmx5LXJ1bnNob3Qta2V5LTMyaW5wdXRieXRlcyE=
+    expiration-ms: 900000
