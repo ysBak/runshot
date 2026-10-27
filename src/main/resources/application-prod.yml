@@ -1,0 +1,3 @@
+app:
+  gateway:
+    key: ${RUNSHOT_GATEWAY_KEY}

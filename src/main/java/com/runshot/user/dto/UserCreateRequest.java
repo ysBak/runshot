@@ -8,10 +8,11 @@ public record UserCreateRequest(
 
         @NotBlank
         @Email
+        @Size(max = 254)
         String email,
 
         @NotBlank
-        @Size(min = 4, max = 100)
+        @Size(min = 8, max = 72)
         String password,
 
         @NotBlank

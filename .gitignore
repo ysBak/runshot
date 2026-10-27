@@ -37,3 +37,13 @@ out/
 .vscode/
 /src/main/resources/application.properties
 /untitled/
+
+# Runtime secrets and local preview outputs
+.env
+.env.*
+!.env.example
+.openai-preview/
+.openai-local/
+/dist/
+.openai/
+**/__pycache__/
